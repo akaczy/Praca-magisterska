@@ -1,0 +1,73 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "../protos/Rosbot.proto"
+EXTERNPROTO "../protos/RpLidarA2.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/solids/protos/SolidBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/CarpetFibers.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/factory/containers/protos/WoodenBox.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/CementTiles.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5773499663760281 0.5773500613877535 0.577350779804753 2.0943990098336362
+  position 0.00027131060133633866 0.0002200314821578786 106.19095295024448
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 40 30
+  floorTileSize 75 50
+  floorAppearance CementTiles {
+  }
+}
+Wall {
+  translation 20.03 0 0
+  size 0.2 30 2.4
+}
+Wall {
+  translation -19.96 0 0
+  name "wall(1)"
+  size 0.2 30 2.4
+}
+Wall {
+  translation 0.140063 -14.9101 0
+  rotation 0 0 1 1.5708
+  name "wall(2)"
+  size 0.2 40 2.4
+}
+Wall {
+  translation 0.139951 14.7599 0
+  rotation 0 0 1 1.5708
+  name "wall(3)"
+  size 0.2 40 2.4
+}
+Wall {
+  translation 12.0135 -6.025 0
+  rotation 0 0 1 2.618
+  name "wall(4)"
+  size 6 5 2.4
+}
+Wall {
+  translation -9.54184 5.55998 0
+  rotation 0 0 -1 -5.307179586466759e-06
+  name "wall(5)"
+  size 6 5 2.4
+}
+Rosbot {
+  controller "<extern>"
+  lidarSlot [
+    RpLidarA2 {
+      rotation 0 0 1 0
+      name "laser"
+    }
+  ]
+}

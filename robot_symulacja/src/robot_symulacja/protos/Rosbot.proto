@@ -1,0 +1,309 @@
+#VRML_SIM R2023b utf8
+#UWAGA NALEŻY ZMIENIĆ W KODZIE LOKALIZACJE PLIKÓW TAK ABY ODPOWIADAŁY NASZEMU KOMPUTEROWI
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/GlossyPaint.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/appearances/protos/Rubber.proto"
+EXTERNPROTO "../protos/RpLidarA2.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/devices/tdk/protos/Mpu-9250.proto"
+
+PROTO Rosbot [
+  field SFVec3f     translation        0 0 0
+  field SFRotation  rotation           1 0 0 1.5708
+  field SFString    name               "rosbot"
+  field SFString    controller         ""
+  field MFString    controllerArgs     []
+  field SFString    customData         ""
+  field SFBool      supervisor         FALSE
+  field SFBool      synchronization    TRUE
+  field SFBool      selfCollision      FALSE
+
+  field SFVec3f     bodyOffset         0 0.050 0.0
+  field SFRotation  bodyRotation       0 0 1 0
+  field SFVec3f     bodyScale          0.001 0.001 0.001
+
+  field SFVec3f     bboxSize           0.205 0.152 0.224
+  field SFVec3f     bboxOffset         0 0.1 0
+
+  field MFNode      lidarSlot          [ RpLidarA2 { name "laser" } ]
+  field SFVec3f     lidarOffset        0 0.17 0
+  field SFRotation  lidarBaseRotation  1 0 0 -1.5708
+
+  # x (front/back), y (height), z (left/right)
+  field SFVec3f     flPos              0.065 0.04 -0.115
+  field SFVec3f     frPos             -0.065 0.04  0.125
+  field SFVec3f     rlPos              0.065 0.04  0.125
+  field SFVec3f     rrPos             -0.065 0.04 -0.115
+
+  field SFFloat     wheelRadius        0.04
+  field SFFloat     wheelWidth         0.02
+  field SFFloat     wheelMass          0.5
+
+  field SFVec3f     wheelMeshScale     0.001 0.001 0.001
+  field SFRotation  wheelMeshRotation  0 1 0 1.5708
+  field SFVec3f     wheelMeshOffset    0 0 0
+
+  # Parametry ograniczające wybieganie:
+  field SFFloat     jointDamping       8.0     # było 2.0
+  field SFFloat     jointStaticFric    1.2     # było 0.5
+] {
+  Robot {
+    translation IS translation
+    rotation    IS rotation
+    controller  IS controller
+    controllerArgs IS controllerArgs
+    customData  IS customData
+    supervisor  IS supervisor
+    synchronization IS synchronization
+    selfCollision IS selfCollision
+
+    children [
+      DEF MAIN_BODY Pose {
+        translation IS bodyOffset
+        rotation    IS bodyRotation
+        children [
+          Transform {
+            scale IS bodyScale
+            children [
+              Shape {
+                appearance GlossyPaint { baseColor 1 1 1 }
+                geometry Mesh {
+                  url [
+                    "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/src/webots_ros2_husarion/meshes/body.stl",
+                    "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/meshes/body.stl"
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+
+      # LEWY PRZÓD
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 -1
+          anchor IS flPos
+          dampingConstant IS jointDamping
+          staticFriction  IS jointStaticFric
+        }
+        device [
+          RotationalMotor { name "fl_wheel_joint" maxVelocity 26.0 maxTorque 100.0 }
+          PositionSensor  { name "front left wheel motor sensor" }
+        ]
+        endPoint Solid {
+          translation IS flPos
+          contactMaterial "rubber"
+          children [
+            Transform {
+              scale IS wheelMeshScale
+              rotation IS wheelMeshRotation
+              translation IS wheelMeshOffset
+              children [
+                Shape {
+                  appearance Rubber { type "flat" }
+                  geometry Mesh {
+                    url [
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/src/webots_ros2_husarion/meshes/wheel.stl",
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/meshes/wheel.stl"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+          name "front left wheel"
+          boundingObject Transform {
+            translation 0 0 -0.0115
+            children [ Cylinder { height IS wheelWidth radius IS wheelRadius } ]
+          }
+          physics Physics { density -1 mass IS wheelMass }
+        }
+      }
+
+      # PRAWY PRZÓD
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 -1
+          anchor IS frPos
+          dampingConstant IS jointDamping
+          staticFriction  IS jointStaticFric
+        }
+        device [
+          RotationalMotor { name "fr_wheel_joint" maxVelocity 26.0 maxTorque 100.0 }
+          PositionSensor  { name "front right wheel motor sensor" }
+        ]
+        endPoint Solid {
+          translation IS frPos
+          contactMaterial "rubber"
+          children [
+            Transform {
+              scale IS wheelMeshScale
+              rotation IS wheelMeshRotation
+              translation IS wheelMeshOffset
+              children [
+                Shape {
+                  appearance Rubber { type "flat" }
+                  geometry Mesh {
+                    url [
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/src/webots_ros2_husarion/meshes/wheel.stl",
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/meshes/wheel.stl"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+          name "front right wheel"
+          boundingObject Transform {
+            translation 0 0 0.0115
+            children [ Cylinder { height IS wheelWidth radius IS wheelRadius } ]
+          }
+          physics Physics { density -1 mass IS wheelMass }
+        }
+      }
+
+      # PRAWY TYŁ
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 -1
+          anchor IS rlPos
+          dampingConstant IS jointDamping
+          staticFriction  IS jointStaticFric
+        }
+        device [
+          RotationalMotor { name "rr_wheel_joint" maxVelocity 26.0 maxTorque 100.0 }
+          PositionSensor  { name "rear right wheel motor sensor" }
+        ]
+        endPoint Solid {
+          translation IS rlPos
+          contactMaterial "rubber"
+          children [
+            Transform {
+              scale IS wheelMeshScale
+              rotation IS wheelMeshRotation
+              translation IS wheelMeshOffset
+              children [
+                Shape {
+                  appearance Rubber { type "flat" }
+                  geometry Mesh {
+                    url [
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/src/webots_ros2_husarion/meshes/wheel.stl",
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/meshes/wheel.stl"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+          name "rear right wheel"
+          boundingObject Transform {
+            translation 0 0 0.0115
+            children [ Cylinder { height IS wheelWidth radius IS wheelRadius } ]
+          }
+          physics Physics { density -1 mass IS wheelMass }
+        }
+      }
+
+      # LEWY TYŁ 
+      HingeJoint {
+        jointParameters HingeJointParameters {
+          axis 0 0 -1
+          anchor IS rrPos
+          dampingConstant IS jointDamping
+          staticFriction  IS jointStaticFric
+        }
+        device [
+          RotationalMotor { name "rl_wheel_joint" maxVelocity 26.0 maxTorque 100.0 }
+          PositionSensor  { name "rear left wheel motor sensor" }
+        ]
+        endPoint Solid {
+          translation IS rrPos
+          contactMaterial "rubber"
+          children [
+            Transform {
+              scale IS wheelMeshScale
+              rotation IS wheelMeshRotation
+              translation IS wheelMeshOffset
+              children [
+                Shape {
+                  appearance Rubber { type "flat" }
+                  geometry Mesh {
+                    url [
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/src/webots_ros2_husarion/meshes/wheel.stl",
+                      "/home/adam/Sim/MecHaRo-Lab_ROSBot2Pro/ws_ros2_husarion/meshes/wheel.stl"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+          name "rear left wheel"
+          boundingObject Transform {
+            translation 0 0 -0.0115
+            children [ Cylinder { height IS wheelWidth radius IS wheelRadius } ]
+          }
+          physics Physics { density -1 mass IS wheelMass }
+        }
+      }
+
+      # IMU
+      Mpu-9250 {
+        translation 0 0.143 0
+        rotation 1 0 0 -1.5708
+        name "imu"
+        includeInertialUnit TRUE
+      }
+
+      # Range finders
+      DistanceSensor {
+        translation 0.100 0.050 0.053
+        rotation 0 0 1 0.130
+        name "fl_range"
+        redColorSensitivity 0
+        lookupTable [ 0 0 0, 2 2 0 ]
+        type "infra-red"
+      }
+      DistanceSensor {
+        translation 0.100 -0.050 0.053
+        rotation 0 0 1 -0.130
+        name "fr_range"
+        redColorSensitivity 0
+        lookupTable [ 0 0 0, 2 2 0 ]
+        type "infra-red"
+      }
+      DistanceSensor {
+        translation -0.100 0.050 0.053
+        rotation 0 0 1 3.010
+        name "rl_range"
+        redColorSensitivity 0
+        lookupTable [ 0 0 0, 2 2 0 ]
+        type "infra-red"
+      }
+      DistanceSensor {
+        translation -0.100 -0.050 0.053
+        rotation 0 0 1 3.270
+        name "rr_range"
+        redColorSensitivity 0
+        lookupTable [ 0 0 0, 2 2 0 ]
+        type "infra-red"
+      }
+
+      # LiDAR
+      DEF LIDAR_MOUNT Pose {
+        translation IS lidarOffset
+        rotation    IS lidarBaseRotation
+        children IS lidarSlot
+      }
+    ]
+
+    name IS name
+
+    boundingObject Transform {
+      translation IS bboxOffset
+      children [ Box { size IS bboxSize } ]
+    }
+
+    physics Physics { density -1 mass 0.45 }
+  }
+}
+

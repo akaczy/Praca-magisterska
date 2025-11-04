@@ -1,0 +1,41 @@
+# Diff Drive + ros2_control dostosowane do Webots 
+controller_manager:
+  ros__parameters:
+    update_rate: 32  # Hz
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    rosbot_base_controller:
+      type: diff_drive_controller/DiffDriveController
+
+rosbot_base_controller:
+  ros__parameters:
+    left_wheel_names: ["fl_wheel_joint", "rl_wheel_joint"]
+    right_wheel_names: ["fr_wheel_joint", "rr_wheel_joint"]
+
+    # Geometria
+    wheel_separation: 0.192          # metry
+    wheel_radius: 0.0425              # promień koła
+    wheel_separation_multiplier: 1.6  # bez korekty
+
+    base_frame_id: "base_link"
+    odom_frame_id: "odom"
+    use_stamped_vel: false
+    enable_odom_tf: false              
+
+    linear:
+      x:
+        has_velocity_limits: true
+        has_acceleration_limits: true
+        has_jerk_limits: false
+        max_velocity: 1.0    
+        max_acceleration: 1.0  
+        max_jerk: 0.0
+
+    angular:
+      z:
+        has_velocity_limits: true
+        has_acceleration_limits: true
+        has_jerk_limits: false
+        max_velocity: 3.0  
+        max_acceleration: 4.0 
+        max_jerk: 0.0

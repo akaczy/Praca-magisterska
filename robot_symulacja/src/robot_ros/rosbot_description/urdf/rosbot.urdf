@@ -1,0 +1,163 @@
+<?xml version="1.0" ?>
+<robot name="rosbot">
+  <link name="base_link"/>
+
+  <joint name="base_to_body_joint" type="fixed">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0425"/>
+    <parent link="base_link"/>
+    <child link="body_link"/>
+  </joint>
+
+  <link name="body_link">
+    <visual>
+      <geometry><box size="0.205 0.205 0.122"/></geometry>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+      <material name="White"><color rgba="1.0 1.0 1.0 1.0"/></material>
+    </visual>
+    <collision>
+      <geometry><box size="0.205 0.205 0.122"/></geometry>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.02"/>
+    </collision>
+    <inertial>
+      <mass value="2.0"/>
+      <inertia ixx="0.00721" ixy="0" ixz="0" iyy="0.01035" iyz="0" izz="0.01006"/>
+    </inertial>
+  </link>
+  <gazebo reference="body_link"><material>Gazebo/White</material></gazebo>
+
+  <joint name="body_to_cover_joint" type="fixed">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0603"/>
+    <parent link="body_link"/>
+    <child link="cover_link"/>
+  </joint>
+
+  <link name="cover_link">
+    <visual>
+      <geometry>
+        <mesh filename="file:///home/student/ROS2_PG/install/rosbot_description/share/rosbot_description/meshes/cover.stl"
+              scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="1.5707963267948966 0.0 3.141592653589793" xyz="0.0 0.0 -0.002"/>
+      <material name="Red"><color rgba="0.8 0.0 0.0 1.0"/></material>
+    </visual>
+    <gazebo reference="cover_link"><material>Gazebo/Red</material></gazebo>
+  </link>
+
+  <joint name="body_to_imu_joint" type="fixed">
+    <origin rpy="0.0 0.0 0.0" xyz="0.003 -0.0495 0.04332"/>
+    <parent link="body_link"/>
+    <child link="imu_link"/>
+  </joint>
+  <link name="imu_link"/>
+
+  <joint name="fl_range_joint" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0.218" xyz="0.0926 0.05 0.015"/>
+    <parent link="body_link"/><child link="fl_range"/>
+  </joint>
+  <link name="fl_range"/>
+  <joint name="fr_range_joint" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 -0.218" xyz="0.0926 -0.05 0.015"/>
+    <parent link="body_link"/><child link="fr_range"/>
+  </joint>
+  <link name="fr_range"/>
+  <joint name="rl_range_joint" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 2.924" xyz="-0.0926 0.05 0.0115"/>
+    <parent link="body_link"/><child link="rl_range"/>
+  </joint>
+  <link name="rl_range"/>
+  <joint name="rr_range_joint" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 3.360" xyz="-0.0926 -0.05 0.0115"/>
+    <parent link="body_link"/><child link="rr_range"/>
+  </joint>
+  <link name="rr_range"/>
+
+  <joint name="fl_wheel_joint" type="continuous">
+    <parent link="body_link"/><child link="fl_wheel_link"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.053 0.096 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+  <link name="fl_wheel_link">
+    <inertial>
+      <mass value="0.100"/>
+      <inertia ixx="0.00007" ixy="0.0" ixz="0.0" iyy="0.0001263" iyz="0.0" izz="0.00007"/>
+    </inertial>
+  </link>
+
+  <joint name="fr_wheel_joint" type="continuous">
+    <parent link="body_link"/><child link="fr_wheel_link"/>
+    <origin rpy="0.0 0.0 0.0" xyz="0.053 -0.096 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+  <link name="fr_wheel_link">
+    <inertial>
+      <mass value="0.100"/>
+      <inertia ixx="0.00007" ixy="0.0" ixz="0.0" iyy="0.0001263" iyz="0.0" izz="0.00007"/>
+    </inertial>
+  </link>
+
+  <joint name="rl_wheel_joint" type="continuous">
+    <parent link="body_link"/><child link="rl_wheel_link"/>
+    <origin rpy="0.0 0.0 0.0" xyz="-0.053 0.096 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+  <link name="rl_wheel_link">
+    <inertial>
+      <mass value="0.100"/>
+      <inertia ixx="0.00007" ixy="0.0" ixz="0.0" iyy="0.0001263" iyz="0.0" izz="0.00007"/>
+    </inertial>
+  </link>
+
+  <joint name="rr_wheel_joint" type="continuous">
+    <parent link="body_link"/><child link="rr_wheel_link"/>
+    <origin rpy="0.0 0.0 0.0" xyz="-0.053 -0.096 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+  <link name="rr_wheel_link">
+    <inertial>
+      <mass value="0.100"/>
+      <inertia ixx="0.00007" ixy="0.0" ixz="0.0" iyy="0.0001263" iyz="0.0" izz="0.00007"/>
+    </inertial>
+  </link>
+
+  <joint name="cover_to_slamtec_rplidar_a2_joint" type="fixed">
+    <origin rpy="0.0 0.0 0.0" xyz="0.02 0.0 0.0"/>
+    <parent link="cover_link"/><child link="slamtec_rplidar_a2_link"/>
+  </joint>
+  <link name="slamtec_rplidar_a2_link">
+    <inertial>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0205"/>
+      <mass value="0.190"/>
+      <inertia ixx="0.000095206" ixy="0.0" ixz="0.0" iyy="0.000095206" iyz="0.0" izz="0.00013718"/>
+    </inertial>
+  </link>
+
+  <joint name="body_to_camera_joint" type="fixed">
+    <origin rpy="0.0 0.0 0.0" xyz="-0.0141 0.0 0.125"/>
+    <parent link="body_link"/><child link="camera_link"/>
+  </joint>
+  <link name="camera_link"/>
+
+  <joint name="camera_to_camera_orbbec_astra_joint" type="fixed">
+    <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
+    <parent link="camera_link"/><child link="camera_orbbec_astra_link"/>
+  </joint>
+  <link name="camera_orbbec_astra_link">
+    <inertial>
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.028999999999999998"/>
+      <mass value="0.300"/>
+      <inertia ixx="0.00073916" ixy="0.0" ixz="0.0" iyy="0.00015435" iyz="0.0" izz="0.00077395"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_orbbec_astra_to_camera_depth_frame_joint" type="fixed">
+    <origin rpy="-1.5707963267948966 0.0 -1.5707963267948966" xyz="0.01 0.0 0.035"/>
+    <parent link="camera_orbbec_astra_link"/>
+    <child link="camera_depth_frame"/>
+  </joint>
+  <link name="camera_depth_frame"/>
+</robot>
+

@@ -1,0 +1,20 @@
+/**:
+  ros__parameters:
+    linear_velocity_factor:
+      fast: 1.0
+      regular: 0.5
+      slow: 0.2
+
+    angular_velocity_factor:
+      fast: 1.0
+      regular: 0.5
+      slow: 0.2
+
+    button_index_map:
+      axis:
+        angular_z: 0
+        linear_x: 3 
+        linear_y: 2 
+      dead_man_switch: 4 
+      fast_mode: 7 
+      slow_mode: 5
